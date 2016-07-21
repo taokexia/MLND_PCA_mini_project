@@ -47,12 +47,11 @@ np.random.seed(42)
 # position info is ignored by this model)
 X = lfw_people.data
 n_features = X.shape[1]
-
+#print "My output: %d" % X.shape[0]
 # the label to predict is the id of the person
 y = lfw_people.target
 target_names = lfw_people.target_names
 n_classes = target_names.shape[0]
-
 print "Total dataset size:"
 print "n_samples: %d" % n_samples
 print "n_features: %d" % n_features
@@ -62,7 +61,7 @@ print "n_classes: %d" % n_classes
 ###############################################################################
 # Split into a training and testing set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
-
+#print "X_test size: %d" % X_test.shape[0] 
 ###############################################################################
 # Compute a PCA (eigenfaces) on the face dataset (treated as unlabeled
 # dataset): unsupervised feature extraction / dimensionality reduction
@@ -72,15 +71,15 @@ print "Extracting the top %d eigenfaces from %d faces" % (n_components, X_train.
 t0 = time()
 pca = RandomizedPCA(n_components=n_components, whiten=True).fit(X_train)
 print "done in %0.3fs" % (time() - t0)
+print pca.explained_variance_ratio_[:10]
 
 eigenfaces = pca.components_.reshape((n_components, h, w))
-
+#print pca.components_.shape
 print "Projecting the input data on the eigenfaces orthonormal basis"
 t0 = time()
 X_train_pca = pca.transform(X_train)
 X_test_pca = pca.transform(X_test)
 print "done in %0.3fs" % (time() - t0)
-
 
 ###############################################################################
 # Train a SVM classification model
@@ -141,6 +140,7 @@ plot_gallery(X_test, prediction_titles, h, w)
 # plot the gallery of the most significative eigenfaces
 
 eigenface_titles = ["eigenface %d" % i for i in range(eigenfaces.shape[0])]
+print "number of eigenfaces: %d" % eigenfaces.shape[0]
 plot_gallery(eigenfaces, eigenface_titles, h, w)
 
 pl.show()
