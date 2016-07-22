@@ -30,6 +30,12 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from sklearn.decomposition import RandomizedPCA
 from sklearn.svm import SVC
+import argparse
+
+parser = argparse.ArgumentParser(description='Predicts names of the people from the pictures using PCA.')
+parser.add_argument('--print_variance', action='store_true',
+                    help='print variance of PCA')
+args = parser.parse_args()
 
 # Display progress logs on stdout
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
@@ -71,7 +77,9 @@ print "Extracting the top %d eigenfaces from %d faces" % (n_components, X_train.
 t0 = time()
 pca = RandomizedPCA(n_components=n_components, whiten=True).fit(X_train)
 print "done in %0.3fs" % (time() - t0)
-print pca.explained_variance_ratio_[:10]
+
+if args.print_variance:
+    print pca.explained_variance_ratio_[:10]
 
 eigenfaces = pca.components_.reshape((n_components, h, w))
 #print pca.components_.shape
