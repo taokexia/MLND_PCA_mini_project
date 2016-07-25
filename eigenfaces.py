@@ -79,7 +79,8 @@ pca = RandomizedPCA(n_components=n_components, whiten=True).fit(X_train)
 print "done in %0.3fs" % (time() - t0)
 
 if args.print_variance:
-    print pca.explained_variance_ratio_[:10]
+    print "Explained variance ratio for %d principal components: " % n_components
+    print pca.explained_variance_ratio_
 
 eigenfaces = pca.components_.reshape((n_components, h, w))
 #print pca.components_.shape
